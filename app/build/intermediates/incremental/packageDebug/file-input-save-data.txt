@@ -1,0 +1,24 @@
+#Internal package file, do not edit.
+#Mon Oct 30 20:49:05 CST 2017
+2.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\mergeJavaRes\\debug\\jars\\2\\1f\\main.jar
+5.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\activity_main.xml
+5.set=ANDROID_RESOURCE
+3.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\mergeJavaRes\\debug\\jars\\2\\1f\\main.jar
+6.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\resources.arsc
+2.set=JAVA_RESOURCE
+4.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+count=7
+0.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_b494517fc7fb77105c09bbbf0a206b111aa6924c\\classes.dex
+5.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+4.set=ANDROID_RESOURCE
+6.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+1.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_a82492b66a443774ddcddd9095c1596246012ee1\\classes.dex
+1.set=DEX
+2.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\mergeJavaRes\\debug\\jars\\2\\1f\\main.jar\\org\\spongycastle\\x509\\CertPathReviewerMessages.properties
+6.set=ANDROID_RESOURCE
+0.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_b494517fc7fb77105c09bbbf0a206b111aa6924c
+3.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\mergeJavaRes\\debug\\jars\\2\\1f\\main.jar\\org\\spongycastle\\x509\\CertPathReviewerMessages_de.properties
+3.set=JAVA_RESOURCE
+1.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_a82492b66a443774ddcddd9095c1596246012ee1
+4.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\AndroidManifest.xml
+0.set=DEX

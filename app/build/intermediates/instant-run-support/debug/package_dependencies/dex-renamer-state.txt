@@ -1,0 +1,13 @@
+#Mon Oct 30 20:49:02 CST 2017
+renamed.3=classes2.dex
+renamed.2=classes3.dex
+renamed.1=classes4.dex
+renamed.0=classes.dex
+base.3=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\sc-light-jdk15on-1.47.0.2_53689820b4da4bd41984a81a682e94b936e77001
+base.2=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\scpkix-jdk15on-1.47.0.2_780c1641235ce237ccc0cbd13dbd6a611dc2828f
+base.1=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\scprov-jdk15on-1.47.0.2_b4f7ec489c4cf5e9d168a35e2008dd674f56eefc
+base.0=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\acra-4.4.0_9420ed0a1e61edf9b927d750642712ec87739c62
+file.3=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\sc-light-jdk15on-1.47.0.2_53689820b4da4bd41984a81a682e94b936e77001\\classes.dex
+file.2=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\scpkix-jdk15on-1.47.0.2_780c1641235ce237ccc0cbd13dbd6a611dc2828f\\classes.dex
+file.1=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\scprov-jdk15on-1.47.0.2_b4f7ec489c4cf5e9d168a35e2008dd674f56eefc\\classes.dex
+file.0=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\2\\acra-4.4.0_9420ed0a1e61edf9b927d750642712ec87739c62\\classes.dex

@@ -1,0 +1,12 @@
+#Internal package file, do not edit.
+#Mon Oct 30 20:47:04 CST 2017
+1.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+1.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\activity_main.xml
+2.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+2.set=ANDROID_RESOURCE
+2.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\resources.arsc
+count=3
+1.set=ANDROID_RESOURCE
+0.set=ANDROID_RESOURCE
+0.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_
+0.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\AndroidManifest.xml

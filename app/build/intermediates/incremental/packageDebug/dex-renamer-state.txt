@@ -1,0 +1,7 @@
+#Mon Oct 30 20:49:05 CST 2017
+base.0=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_a82492b66a443774ddcddd9095c1596246012ee1
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_b494517fc7fb77105c09bbbf0a206b111aa6924c\\classes.dex
+base.1=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run-bootstrap_b494517fc7fb77105c09bbbf0a206b111aa6924c
+file.0=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10000\\instant-run_a82492b66a443774ddcddd9095c1596246012ee1\\classes.dex
