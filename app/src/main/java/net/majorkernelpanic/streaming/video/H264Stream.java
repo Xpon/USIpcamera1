@@ -91,10 +91,14 @@ public class H264Stream extends VideoStream {
 	 * This will also open the camera and dispay the preview if {@link #startPreview()} has not aready been called.
 	 */
 	public synchronized void start() throws IllegalStateException, IOException {
+		Log.e(TAG,"start() START");
 		configure();
+		Log.e(TAG,"++++++++++++++++++++++++");
 		if (!mStreaming) {
+			Log.e(TAG,"-------------------");
 			byte[] pps = Base64.decode(mConfig.getB64PPS(), Base64.NO_WRAP);
 			byte[] sps = Base64.decode(mConfig.getB64SPS(), Base64.NO_WRAP);
+			Log.e(TAG,"----pps.length="+pps.length+";"+"----sps"+sps.length);
 			((H264Packetizer)mPacketizer).setStreamParameters(pps, sps);
 			super.start();
 		}
@@ -109,6 +113,7 @@ public class H264Stream extends VideoStream {
 		mMode = mRequestedMode;
 		mQuality = mRequestedQuality.clone();
 		mConfig = testH264();
+		Log.e(TAG,"configure END");
 	}
 	
 	/** 
@@ -125,11 +130,10 @@ public class H264Stream extends VideoStream {
 		createCamera();
 		updateCamera();
 		try {
-			if (mQuality.resX>=640) {
-				// Using the MediaCodec API with the buffer method for high resolutions is too slow
-				mMode = MODE_MEDIARECORDER_API;
-			}
+			// Using the MediaCodec API with the buffer method for high resolutions is too slow
+			mMode = MODE_MEDIARECORDER_API;
 			EncoderDebugger debugger = EncoderDebugger.debug(mSettings, mQuality.resX, mQuality.resY);
+			Log.e(TAG,"sps"+debugger.getB64SPS()+":"+"pps"+debugger.getB64PPS());
 			return new MP4Config(debugger.getB64SPS(), debugger.getB64PPS());
 		} catch (Exception e) {
 			// Fallback on the old streaming method using the MediaRecorder API

@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:2:1-46:12
+ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:2:1-45:12
 	package
 		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:3:5-44
 		INJECTED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml
@@ -74,7 +74,7 @@ ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:23:5-7
 	android:name
 		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:23:22-75
 application
-ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:25:5-44:19
+ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:25:5-43:19
 	android:label
 		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:29:9-41
 	android:allowBackup
@@ -97,7 +97,7 @@ category#android.intent.category.LAUNCHER
 ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:38:17-77
 	android:name
 		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:38:27-74
-service#net.majorkernelpanic.spydroid.api.CustomRtspServer
-ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:42:9-85
+service#net.majorkernelpanic.streaming.rtsp.RtspServer
+ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:42:9-81
 	android:name
-		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:42:18-83
+		ADDED from D:\github_project\USIpcamera1\app\src\main\AndroidManifest.xml:42:18-79

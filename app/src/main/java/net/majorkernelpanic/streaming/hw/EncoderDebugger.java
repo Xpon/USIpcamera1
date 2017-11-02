@@ -65,7 +65,7 @@ public class EncoderDebugger {
 	private static final boolean DEBUG = false;
 	
 	/** Set this to true to see more logs. */
-	private static final boolean VERBOSE = false;
+	private static final boolean VERBOSE = true;
 
 	/** Will be incremented every time this test is modified. */
 	private static final int VERSION = 3;
@@ -378,6 +378,7 @@ public class EncoderDebugger {
 			mInitialImage[i] = (byte) (40+i%200);
 			mInitialImage[i+1] = (byte) (40+(i+99)%200);
 		}
+//		mInitialImage = rotateYUV420Degree90(mInitialImage,640,480);
 
 	}
 
@@ -634,6 +635,7 @@ public class EncoderDebugger {
 
 			int index = mEncoder.dequeueOutputBuffer(info, 1000000/FRAMERATE);
 
+			Log.e(TAG,"index="+index);
 			if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
 
 				// The PPS and PPS shoud be there
@@ -653,8 +655,12 @@ public class EncoderDebugger {
 			} else if (index>=0) {
 
 				len = info.size;
+				Log.e(TAG,"len="+len);
 				if (len<128) {
 					outputBuffers[index].get(csd,0,len);
+					for(int i = 0;i<len;i++){
+						Log.e(TAG,"csd"+i+"="+csd[i]);
+					}
 					if (len>0 && csd[0]==0 && csd[1]==0 && csd[2]==0 && csd[3]==1) {
 						// Parses the SPS and PPS, they could be in two different packets and in a different order 
 						//depending on the phone so we don't make any assumption about that
@@ -680,8 +686,13 @@ public class EncoderDebugger {
 		}
 
 		check(mPPS != null & mSPS != null, "Could not determine the SPS & PPS.");
+		Log.e(TAG,"mSPS="+mSPS.length+";"+"mPPS="+mPPS.length);
+		for(int i=0;i<mSPS.length;i++){
+			Log.e(TAG,"byte"+i+"="+mSPS[i]);
+		}
 		mB64PPS = Base64.encodeToString(mPPS, 0, mPPS.length, Base64.NO_WRAP);
 		mB64SPS = Base64.encodeToString(mSPS, 0, mSPS.length, Base64.NO_WRAP);
+		Log.e(TAG,"mB64PPS="+mB64PPS+";"+"mB64SPS="+mB64SPS);
 
 		return elapsed;
 	}

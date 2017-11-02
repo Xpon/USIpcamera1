@@ -40,6 +40,7 @@ import net.majorkernelpanic.streaming.Session;
 import net.majorkernelpanic.streaming.SessionBuilder;
 import net.majorkernelpanic.streaming.gl.SurfaceView;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -63,98 +64,19 @@ import android.widget.LinearLayout;
 public class RtspServer extends Service {
 
 	public final static String TAG = "RtspServer";
-
 	/** The server name that will appear in responses. */
 	public static String SERVER_NAME = "MajorKernelPanic RTSP Server";
-
 	/** Port used by default. */
 	public static final int DEFAULT_RTSP_PORT = 8086;
-
-	/** Port already in use. */
-	public final static int ERROR_BIND_FAILED = 0x00;
-
-	/** A stream could not be started. */
-	public final static int ERROR_START_FAILED = 0x01;
-
-	/** Streaming started. */
-	public final static int MESSAGE_STREAMING_STARTED = 0X00;
-	
-	/** Streaming stopped. */
-	public final static int MESSAGE_STREAMING_STOPPED = 0X01;
-	
-	/** Key used in the SharedPreferences to store whether the RTSP server is enabled or not. */
-	public final static String KEY_ENABLED = "rtsp_enabled";
-
-	/** Key used in the SharedPreferences for the port used by the RTSP server. */
-	public final static String KEY_PORT = "rtsp_port";
-
-	protected SessionBuilder mSessionBuilder;
-	protected SharedPreferences mSharedPreferences;
 	protected boolean mEnabled = true;	
 	protected int mPort = DEFAULT_RTSP_PORT;
 	protected WeakHashMap<Session,Object> mSessions = new WeakHashMap<Session,Object>(2);
-	
 	private RequestListener mListenerThread;
 	private final IBinder mBinder = new LocalBinder();
 	private boolean mRestart = false;
-	private final LinkedList<CallbackListener> mListeners = new LinkedList<CallbackListener>();
     private SurfaceView surfaceview;
     WindowManager wm;  
-    LinearLayout relLay; 
-
-	public RtspServer() {
-	}
-
-	/** Be careful: those callbacks won't necessarily be called from the ui thread ! */
-	public interface CallbackListener {
-
-		/** Called when an error occurs. */
-		void onError(RtspServer server, Exception e, int error);
-
-		/** Called when streaming starts/stops. */
-		void onMessage(RtspServer server, int message);
-		
-	}
-
-	/**
-	 * See {@link RtspServer.CallbackListener} to check out what events will be fired once you set up a listener.
-	 * @param listener The listener
-	 */
-	public void addCallbackListener(CallbackListener listener) {
-		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
-				for (CallbackListener cl : mListeners) {
-					if (cl == listener) return;
-				}
-			}
-			mListeners.add(listener);			
-		}
-	}
-
-	/**
-	 * Removes the listener.
-	 * @param listener The listener
-	 */
-	public void removeCallbackListener(CallbackListener listener) {
-		synchronized (mListeners) {
-			mListeners.remove(listener);				
-		}
-	}
-
-	/** Returns the port used by the RTSP server. */	
-	public int getPort() {
-		return mPort;
-	}
-
-	/**
-	 * Sets the port for the RTSP server to use.
-	 * @param port The port
-	 */
-	public void setPort(int port) {
-		Editor editor = mSharedPreferences.edit();
-		editor.putString(KEY_PORT, String.valueOf(port));
-		editor.commit();
-	}	
+    LinearLayout relLay;
 
 	/** 
 	 * Starts (or restart if needed, if for example the configuration 
@@ -201,22 +123,7 @@ public class RtspServer extends Service {
 		}
 		return false;
 	}
-	
-	public boolean isEnabled() {
-		return mEnabled;
-	}
 
-	/** Returns the bandwidth consumed by the RTSP server in bits per second. */
-	public long getBitrate() {
-		long bitrate = 0;
-		for ( Session session : mSessions.keySet() ) {
-		    if ( session != null ) {
-		    	if (session.isStreaming()) bitrate += session.getBitrate();
-		    } 
-		}
-		return bitrate;
-	}
-	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		return START_STICKY;
@@ -224,13 +131,7 @@ public class RtspServer extends Service {
 
 	@Override
 	public void onCreate() {
-
-		// Let's restore the state of the service 
-		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		mPort = Integer.parseInt(mSharedPreferences.getString(KEY_PORT, String.valueOf(mPort)));
-		mEnabled = true;
-		mSharedPreferences.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
-        wm = (WindowManager) getApplicationContext().getSystemService("window");  
+        wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();  
         wmParams.type = WindowManager.LayoutParams.TYPE_PHONE;  
         wmParams.format = 1;  
@@ -239,12 +140,12 @@ public class RtspServer extends Service {
         wmParams.width = WindowManager.LayoutParams.WRAP_CONTENT;  
         wmParams.height = WindowManager.LayoutParams.WRAP_CONTENT;  
         wmParams.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER;  
-        wmParams.x = 0;  
-        wmParams.y = 0;  
+        wmParams.x = 100;
+        wmParams.y = 100;
         surfaceview = new SurfaceView(this,null);    
         WindowManager.LayoutParams params_sur = new WindowManager.LayoutParams();  
-        params_sur.width = 1;  
-        params_sur.height = 1;  
+        params_sur.width = 100;
+        params_sur.height = 100;
         params_sur.alpha = 255;  
         surfaceview.setLayoutParams(params_sur);      
         relLay = new LinearLayout(this);  
@@ -262,27 +163,7 @@ public class RtspServer extends Service {
 	@Override
 	public void onDestroy() {
 		stop();
-		mSharedPreferences.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
 	}
-
-	private OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener = new OnSharedPreferenceChangeListener() {
-		@Override
-		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-			if (key.equals(KEY_PORT)) {
-				int port = Integer.parseInt(sharedPreferences.getString(KEY_PORT, String.valueOf(mPort)));
-				if (port != mPort) {
-					mPort = port;
-					mRestart = true;
-					start();
-				}
-			}		
-			else if (key.equals(KEY_ENABLED)) {
-				mEnabled = sharedPreferences.getBoolean(KEY_ENABLED, mEnabled);
-				start();
-			}
-		}
-	};
 
 	/** The Binder you obtain when a connection with the Service is established. */
 	public class LocalBinder extends Binder {
@@ -296,25 +177,6 @@ public class RtspServer extends Service {
 		return mBinder;
 	}
 
-	protected void postMessage(int id) {
-		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
-				for (CallbackListener cl : mListeners) {
-					cl.onMessage(this, id);
-				}
-			}			
-		}
-	}	
-	
-	protected void postError(Exception exception, int id) {
-		synchronized (mListeners) {
-			if (mListeners.size() > 0) {
-				for (CallbackListener cl : mListeners) {
-					cl.onError(this, exception, id);
-				}
-			}			
-		}
-	}
 
 	/** 
 	 * By default the RTSP uses {@link UriParser} to parse the URI requested by the client
@@ -342,7 +204,6 @@ public class RtspServer extends Service {
 				start();
 			} catch (BindException e) {
 				Log.e(TAG,"Port already in use !");
-				postError(e, ERROR_BIND_FAILED);
 				throw e;
 			}
 		}
@@ -419,8 +280,6 @@ public class RtspServer extends Service {
 						response = processRequest(request);
 					}
 					catch (Exception e) {
-						// This alerts the main thread that something has gone wrong in this thread
-						postError(e, ERROR_START_FAILED);
 						Log.e(TAG,e.getMessage()!=null?e.getMessage():"An error occurred");
 						e.printStackTrace();
 						response = new Response(request);
@@ -439,11 +298,7 @@ public class RtspServer extends Service {
 			}
 
 			// Streaming stops when client disconnects
-			boolean streaming = isStreaming();
 			mSession.syncStop();
-			if (streaming && !isStreaming()) {
-				postMessage(MESSAGE_STREAMING_STOPPED);
-			}
 			mSession.release();
 
 			try {
@@ -461,7 +316,7 @@ public class RtspServer extends Service {
 			/* ********************************* Method DESCRIBE ******************************** */
 			/* ********************************************************************************** */
 			if (request.method.equalsIgnoreCase("DESCRIBE")) {
-
+				Log.e(TAG,"DESCRIBE START");
 				// Parse the requested URI and configure the session
 				mSession = handleRequest(request.uri, mClient);
 				mSessions.put(mSession, null);
@@ -471,12 +326,14 @@ public class RtspServer extends Service {
 				String requestAttributes = 
 						"Content-Base: "+mClient.getLocalAddress().getHostAddress()+":"+mClient.getLocalPort()+"/\r\n" +
 								"Content-Type: application/sdp\r\n";
-
+				Log.e(TAG,"requestContent="+requestContent);
 				response.attributes = requestAttributes;
+				Log.e(TAG,"response.attributes="+response.attributes);
 				response.content = requestContent;
-
+				Log.e(TAG,"response.content="+response.content);
 				// If no exception has been thrown, we reply with OK
 				response.status = Response.STATUS_OK;
+				Log.e(TAG,"STATUS_OK");
 
 			}
 
@@ -484,6 +341,7 @@ public class RtspServer extends Service {
 			/* ********************************* Method OPTIONS ********************************* */
 			/* ********************************************************************************** */
 			else if (request.method.equalsIgnoreCase("OPTIONS")) {
+				Log.e(TAG,"OPTIONS START");
 				response.status = Response.STATUS_OK;
 				response.attributes = "Public: DESCRIBE,SETUP,TEARDOWN,PLAY,PAUSE\r\n";
 				response.status = Response.STATUS_OK;
@@ -493,6 +351,7 @@ public class RtspServer extends Service {
 			/* ********************************** Method SETUP ********************************** */
 			/* ********************************************************************************** */
 			else if (request.method.equalsIgnoreCase("SETUP")) {
+				Log.e(TAG,"SETUP START");
 				Pattern p; Matcher m;
 				int p2, p1, ssrc, trackId, src[];
 				String destination;
@@ -530,13 +389,7 @@ public class RtspServer extends Service {
 				destination = mSession.getDestination();
 
 				mSession.getTrack(trackId).setDestinationPorts(p1, p2);
-				
-				boolean streaming = isStreaming();
 				mSession.syncStart(trackId);
-				if (!streaming && isStreaming()) {
-					postMessage(MESSAGE_STREAMING_STARTED);
-				}
-
 				response.attributes = "Transport: RTP/AVP/UDP;"+(InetAddress.getByName(destination).isMulticastAddress()?"multicast":"unicast")+
 						";destination="+mSession.getDestination()+
 						";client_port="+p1+"-"+p2+
@@ -546,7 +399,6 @@ public class RtspServer extends Service {
 						"Session: "+ "1185d20035702ca" + "\r\n" +
 						"Cache-Control: no-cache\r\n";
 				response.status = Response.STATUS_OK;
-
 				// If no exception has been thrown, we reply with OK
 				response.status = Response.STATUS_OK;
 
@@ -602,19 +454,25 @@ public class RtspServer extends Service {
 		public static final Pattern regexMethod = Pattern.compile("(\\w+) (\\S+) RTSP",Pattern.CASE_INSENSITIVE);
 		// Parse a request header
 		public static final Pattern rexegHeader = Pattern.compile("(\\S+):(.+)",Pattern.CASE_INSENSITIVE);
-
 		public String method;
 		public String uri;
 		public HashMap<String,String> headers = new HashMap<String,String>();
 
 		/** Parse the method, uri & headers of a RTSP request */
-		public static Request parseRequest(BufferedReader input) throws IOException, IllegalStateException, SocketException {
+		public static Request parseRequest(BufferedReader input) throws IOException, IllegalStateException {
 			Request request = new Request();
 			String line;
 			Matcher matcher;
 
 			// Parsing request method & uri
-			if ((line = input.readLine())==null) throw new SocketException("Client disconnected");
+			if ((line = input.readLine())==null){
+				Log.e(TAG,"line==null");
+				throw new SocketException("Client disconnected");
+			}else{
+				StringBuffer sb = new StringBuffer();
+				sb.append(line);
+				Log.e(TAG,"input="+sb.toString());
+			}
 			matcher = regexMethod.matcher(line);
 			matcher.find();
 			request.method = matcher.group(1);
@@ -624,13 +482,12 @@ public class RtspServer extends Service {
 			while ( (line = input.readLine()) != null && line.length()>3 ) {
 				matcher = rexegHeader.matcher(line);
 				matcher.find();
+				Log.e(TAG,"matcher.group(1)="+matcher.group(1)+";"+"matcher.group(2)="+matcher.group(2));
 				request.headers.put(matcher.group(1).toLowerCase(Locale.US),matcher.group(2));
 			}
 			if (line==null) throw new SocketException("Client disconnected");
 
 			// It's not an error, it's just easier to follow what's happening in logcat with the request in red
-			Log.e(TAG,request.method+" "+request.uri);
-
 			return request;
 		}
 	}

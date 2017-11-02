@@ -75,6 +75,12 @@ public class H264Packetizer extends AbstractPacketizer implements Runnable {
 	}
 
 	public void setStreamParameters(byte[] pps, byte[] sps) {
+		for(int i=0;i<sps.length;i++){
+			Log.e(TAG,"sps"+i+"="+sps[i]);
+		}
+		for(int i=0;i<pps.length;i++){
+			Log.e(TAG,"pps"+i+"="+pps[i]);
+		}
 		this.pps = pps;
 		this.sps = sps;
 	}	
@@ -179,6 +185,7 @@ public class H264Packetizer extends AbstractPacketizer implements Runnable {
 		if (type == 7 || type == 8) {
 			Log.v(TAG,"SPS or PPS present in the stream.");
 			count++;
+			Log.e(TAG,"count="+count);
 			if (count>4) {
 				sps = null;
 				pps = null;

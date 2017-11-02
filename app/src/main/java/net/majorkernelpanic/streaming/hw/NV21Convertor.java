@@ -20,9 +20,20 @@
 
 package net.majorkernelpanic.streaming.hw;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.media.MediaCodecInfo;
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -35,8 +46,8 @@ public class NV21Convertor {
 	private int mSize;
 	private boolean mPlanar, mPanesReversed = false;
 	private int mYPadding;
-	private byte[] mBuffer; 
-	ByteBuffer mCopy;
+	private byte[] mBuffer;
+	private boolean b = true;
 	
 	public void setSize(int width, int height) {
 		mHeight = height;
@@ -107,9 +118,7 @@ public class NV21Convertor {
 	
 	public void convert(byte[] data, ByteBuffer buffer) {
  	    byte[] result = convert(data);
-		Log.e("Xpon","result.length"+result.length);
 		buffer.put(result, 0, result.length);
-		Log.e(TAG,"result.length="+result.length);
 	}
 	
 	public byte[] convert(byte[] data) {
@@ -118,10 +127,6 @@ public class NV21Convertor {
 		if (mBuffer==null || mBuffer.length != 3*mSliceHeight*mStride/2+mYPadding) {
 			mBuffer = new byte[3*mSliceHeight*mStride/2+mYPadding];
 		}
-		Log.e(TAG,"mSliceHeight="+mSliceHeight+";"+"mHeight="+mHeight+";"+"mStride="+mStride+";"+"mWidth="+mWidth);
-		Log.e(TAG,"mPlanar="+mPlanar);
-		Log.e(TAG,"mYPadding="+mYPadding);
-		Log.e(TAG,"mPanesReversed="+mPanesReversed);
 		if (!mPlanar) {
 			if (mSliceHeight==mHeight && mStride==mWidth) {
 				// Swaps U and V
@@ -129,7 +134,7 @@ public class NV21Convertor {
 					for (int i = mSize; i < mSize+mSize/2; i += 2) {
 						mBuffer[0] = data[i+1];
 						data[i+1] = data[i];
-						data[i] = mBuffer[0]; 
+						data[i] = mBuffer[0];
 					}
 				}
 				if (mYPadding>0) {
@@ -163,10 +168,9 @@ public class NV21Convertor {
 				return data;
 			}
 		}
-		
 		return data;
-	}	
-	
+	}
+
 }
 	
 

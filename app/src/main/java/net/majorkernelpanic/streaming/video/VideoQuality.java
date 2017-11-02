@@ -36,7 +36,7 @@ public class VideoQuality {
 	public final static String TAG = "VideoQuality";
 	
 	/** Default video stream quality. */
-	public final static VideoQuality DEFAULT_VIDEO_QUALITY = new VideoQuality(176,144,20,500000);
+	public final static VideoQuality DEFAULT_VIDEO_QUALITY = new VideoQuality(480,640,20,800000);
 
 	/**	Represents a quality for a video stream. */ 
 	public VideoQuality() {}
@@ -111,13 +111,13 @@ public class VideoQuality {
 			Size size = it.next();
 			videoSziesStr += size.width+"x"+size.height+(it.hasNext()?", ":"");
 		}
-		Log.e("Xpon",videoSziesStr);
+		Log.e(TAG,videoSziesStr);
 		List<Size> supportedSizes = parameters.getSupportedPreviewSizes();
 		for (Iterator<Size> it = supportedSizes.iterator(); it.hasNext();) {
 			Size size = it.next();
 			supportedSizesStr += size.width+"x"+size.height+(it.hasNext()?", ":"");
 			int dist = Math.abs(quality.resX - size.width);
-			Log.e("Xpon","minDist="+minDist+";"+"quality.resX="+quality.resX+";"+"size.width="+size.width+";"+"dist="+dist);
+			Log.e(TAG,"minDist="+minDist+";"+"quality.resX="+quality.resX+";"+"size.width="+size.width+";"+"dist="+dist);
 			if (dist<minDist) {
 				minDist = dist;
 				v.resX = size.width;
@@ -128,7 +128,7 @@ public class VideoQuality {
 		if (quality.resX != v.resX || quality.resY != v.resY) {
 			Log.v(TAG,"Resolution modified: "+quality.resX+"x"+quality.resY+"->"+v.resX+"x"+v.resY);
 		}
-		Log.e("Xpon","v.resX="+v.resX+";"+"resY="+v.resY);
+		Log.e("TAG","v.resX="+v.resX+";"+"resY="+v.resY);
 		return v;
 	}
 

@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Mon Oct 30 20:49:05 CST 2017
+#Tue Oct 31 14:32:08 CST 2017
 2.base=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\transforms\\mergeJavaRes\\debug\\jars\\2\\1f\\main.jar
 5.file=D\:\\github_project\\USIpcamera1\\app\\build\\intermediates\\res\\resources-debug.ap_\\res\\layout\\activity_main.xml
 5.set=ANDROID_RESOURCE

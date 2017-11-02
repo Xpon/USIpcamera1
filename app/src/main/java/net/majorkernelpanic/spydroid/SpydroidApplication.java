@@ -42,7 +42,7 @@ public class SpydroidApplication extends android.app.Application {
 	public final static String TAG = "SpydroidApplication";
 	
 	/** Default quality of video streams. */
-	public VideoQuality videoQuality = new VideoQuality(320,240,20,500000);
+	public VideoQuality videoQuality = new VideoQuality(480,640,20,800000);
 	public int videoEncoder = SessionBuilder.VIDEO_H264;
 	public final boolean DONATE_VERSION = false;
 	public boolean applicationForeground = true;
@@ -55,14 +55,13 @@ public class SpydroidApplication extends android.app.Application {
 	public void onCreate() {
 		sApplication = this;
 		super.onCreate();
-		videoQuality = new VideoQuality(640,480, 20,1000000);
+		videoQuality = new VideoQuality(480,640, 20,800000);
 		SessionBuilder.getInstance() 
 		.setContext(getApplicationContext())
 		.setVideoEncoder(videoEncoder)
 		.setVideoQuality(videoQuality);
 
 	}
-
 	public static SpydroidApplication getInstance() {
 		return sApplication;
 	}

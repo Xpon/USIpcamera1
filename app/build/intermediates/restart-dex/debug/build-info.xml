@@ -6,31 +6,28 @@
     density="xhdpi"
     format="10"
     plugin-version="2.3.3"
-    timestamp="1509368320890"
+    timestamp="1509630197290"
     token="8316906896740638438"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="1519" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="15" />
+        duration="0" />
     <task
         name="verifier"
-        duration="24" />
+        duration="0" />
 
     <artifact
-        location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+        location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
         type="SPLIT" />
     <artifact
         location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\dep\dependencies.apk"
-        type="SPLIT" />
-    <artifact
-        location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
         type="SPLIT" />
     <artifact
         location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
@@ -43,6 +40,9 @@
         type="SPLIT" />
     <artifact
         location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+        type="SPLIT" />
+    <artifact
+        location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
         type="SPLIT" />
     <artifact
         location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_9.apk"
@@ -62,16 +62,13 @@
 
     <build
         build-mode="FULL"
-        timestamp="1509368320890"
+        timestamp="1509630197290"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
-            location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
+            location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
             type="SPLIT" />
         <artifact
             location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\dep\dependencies.apk"
-            type="SPLIT" />
-        <artifact
-            location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
             type="SPLIT" />
         <artifact
             location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_0.apk"
@@ -84,6 +81,9 @@
             type="SPLIT" />
         <artifact
             location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_3.apk"
+            type="SPLIT" />
+        <artifact
+            location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_1.apk"
             type="SPLIT" />
         <artifact
             location="D:\github_project\USIpcamera1\app\build\intermediates\split-apk\debug\slices\slice_9.apk"

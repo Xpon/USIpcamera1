@@ -20,9 +20,11 @@
 
 package net.majorkernelpanic.streaming.video;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +40,11 @@ import net.majorkernelpanic.streaming.rtp.MediaCodecInputStream;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
@@ -79,8 +86,8 @@ public abstract class VideoStream extends MediaStream {
 	protected String mEncoderName;
 	protected int mEncoderColorFormat;
 	protected int mCameraImageFormat;
-	protected int mMaxFps = 0;	
-
+	protected int mMaxFps = 0;
+	protected boolean b =true;
 	/** 
 	 * Don't use this class directly.
 	 * Uses CAMERA_FACING_BACK by default.
@@ -228,7 +235,6 @@ public abstract class VideoStream extends MediaStream {
 	 * @param videoQuality Quality of the stream
 	 */
 	public void setVideoQuality(VideoQuality videoQuality) {
-		Log.e("Hycin","videoQuality.resX="+videoQuality.resX+";"+"videoQuality.resY="+videoQuality.resY);
 		mRequestedQuality = videoQuality.clone();
 	}
 
@@ -444,6 +450,7 @@ public abstract class VideoStream extends MediaStream {
 			ByteBuffer[] inputBuffers = mMediaCodec.getInputBuffers();
 			@Override
 			public void onPreviewFrame(byte[] data, Camera camera) {
+				byte[] data1 = rotateYUV420Degree90(data,640,480);
 				Log.e("Orientation","mOrientation="+mOrientation);
 				oldnow = now;
 				now = System.nanoTime()/1000;
@@ -452,18 +459,19 @@ public abstract class VideoStream extends MediaStream {
 					//Log.d(TAG,"Measured: "+1000000L/(now-oldnow)+" fps.");
 				}
 				try {
-					Log.e(TAG,"data.length="+data.length);
 					int bufferIndex = mMediaCodec.dequeueInputBuffer(500000);
 					Log.e(TAG,"bufferIndex="+bufferIndex);
 					if (bufferIndex>=0) {
 						inputBuffers[bufferIndex].clear();
-						convertor.convert(data, inputBuffers[bufferIndex]);
+						convertor.convert(data1, inputBuffers[bufferIndex]);
 						mMediaCodec.queueInputBuffer(bufferIndex, 0, inputBuffers[bufferIndex].position(), now, 0);
 					} else {
 						Log.e(TAG,"No buffer available !");
 					}
 				} finally {
-					mCamera.addCallbackBuffer(data);
+					if(mCamera!=null) {
+						mCamera.addCallbackBuffer(data);
+					}
 				}				
 			}
 		};
@@ -480,7 +488,6 @@ public abstract class VideoStream extends MediaStream {
 		}catch(Exception e){
 			throw new RuntimeException(e.getMessage());
 		}
-
 	}
 
 	/**
@@ -502,7 +509,7 @@ public abstract class VideoStream extends MediaStream {
 		EncoderDebugger debugger = EncoderDebugger.debug(mSettings, mQuality.resX, mQuality.resY);
 
 		mMediaCodec = MediaCodec.createByCodecName(debugger.getEncoderName());
-		MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/avc", mQuality.resX, mQuality.resY);
+		MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/avc", 480, 640);
 		mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, mQuality.bitrate);
 		mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, mQuality.framerate);	
 		mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
@@ -640,7 +647,7 @@ public abstract class VideoStream extends MediaStream {
 		mQuality = VideoQuality.determineClosestSupportedResolution(parameters, mQuality);
 		int[] max = VideoQuality.determineMaximumSupportedFramerate(parameters);
 		parameters.setPreviewFormat(mCameraImageFormat);
-		parameters.setPreviewSize(mQuality.resX, mQuality.resY);
+		parameters.setPreviewSize(mQuality.resY, mQuality.resX);
 		parameters.setPreviewFpsRange(max[0], max[1]);
 
 		try {
@@ -720,5 +727,36 @@ public abstract class VideoStream extends MediaStream {
 
 		mCamera.setPreviewCallback(null);
 
+	}
+
+	private byte[] rotateYUV420Degree90(byte[] data, int imageWidth, int imageHeight)
+	{
+		byte [] yuv = new byte[imageWidth*imageHeight*3/2];
+		// Rotate the Y luma
+		int i = 0;
+		for(int x = 0;x < imageWidth;x++)
+		{
+			for(int y = imageHeight-1;y >= 0;y--)
+			{
+				yuv[i] = data[y*imageWidth+x];
+				i++;
+			}
+		}
+		Log.e(TAG,"i="+i);
+
+		// Rotate the U and V color components
+		i = imageWidth*imageHeight*3/2-1;
+		for(int x = imageWidth-1;x > 0;x=x-2)
+		{
+			for(int y = 0;y < imageHeight/2;y++)
+			{
+				yuv[i] = data[(imageWidth*imageHeight)+(y*imageWidth)+x];
+				i--;
+				yuv[i] = data[(imageWidth*imageHeight)+(y*imageWidth)+(x-1)];
+				i--;
+			}
+		}
+		Log.e(TAG,"NEW_i="+i);
+		return yuv;
 	}
 }
